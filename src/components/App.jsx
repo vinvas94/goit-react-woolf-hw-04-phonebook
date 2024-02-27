@@ -15,15 +15,15 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+  useEffect(() => {
     const storedContacts = localStorage.getItem('contacts');
     if (storedContacts) {
       setContacts(JSON.parse(storedContacts));
     }
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   const handleDelete = useCallback(contactId => {
     setContacts(contacts =>
@@ -55,7 +55,7 @@ const App = () => {
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter)
     );
-  });
+  }, [contacts, filter]);
 
   const visibleContacts = filterContacts();
 

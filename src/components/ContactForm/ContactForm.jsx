@@ -10,7 +10,8 @@ const ContactForm = ({ onSubmit, title }) => {
   const numberId = nanoid();
 
   const handleChange = e => {
-    const { name, value } = e.currentTarget;
+    const { name, value } = e.target;
+
     if (name === 'name') {
       setName(value);
     } else if (name === 'number') {
