@@ -4,19 +4,19 @@ import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { nanoid } from 'nanoid';
 
+const initialContacts = [
+  { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+  { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+];
+
 const App = () => {
-  const [contacts, setContacts] = useState([
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ]);
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(localStorage.getItem('contacts')) || initialContacts
+  );
 
   const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   useEffect(() => {
     const storedContacts = localStorage.getItem('contacts');
@@ -24,6 +24,10 @@ const App = () => {
       setContacts(JSON.parse(storedContacts));
     }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
   const handleDelete = useCallback(contactId => {
     setContacts(contacts =>
@@ -75,7 +79,11 @@ const App = () => {
       <ContactForm onSubmit={formSubmitHandler} />
       <h2>Contacts</h2>
       <Filter value={filter} onChange={filterInputValue} />
-      <ContactList contacts={visibleContacts} onDelete={handleDelete} />
+      {contacts.length === 0 ? (
+        <p>There are no contacts</p>
+      ) : (
+        <ContactList contacts={visibleContacts} onDelete={handleDelete} />
+      )}
     </div>
   );
 };
