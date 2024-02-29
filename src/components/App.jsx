@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
@@ -19,21 +19,16 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    const storedContacts = localStorage.getItem('contacts');
-    if (storedContacts) {
-      setContacts(JSON.parse(storedContacts));
-    }
-  }, []);
-
-  useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleDelete = useCallback(contactId => {
-    setContacts(contacts =>
-      contacts.filter(contact => contact.id !== contactId)
-    );
-  }, []);
+  const handleDelete =
+    (contactId => {
+      setContacts(contacts =>
+        contacts.filter(contact => contact.id !== contactId)
+      );
+    },
+    []);
 
   const formSubmitHandler = data => {
     const { name } = data;
@@ -54,12 +49,14 @@ const App = () => {
     setFilter(e.target.value);
   };
 
-  const filterContacts = useCallback(() => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  }, [contacts, filter]);
+  const filterContacts =
+    (() => {
+      const normalizedFilter = filter.toLowerCase();
+      return contacts.filter(contact =>
+        contact.name.toLowerCase().includes(normalizedFilter)
+      );
+    },
+    [contacts, filter]);
 
   const visibleContacts = filterContacts();
 
