@@ -22,13 +22,11 @@ const App = () => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
-  const handleDelete =
-    (contactId => {
-      setContacts(contacts =>
-        contacts.filter(contact => contact.id !== contactId)
-      );
-    },
-    []);
+  const handleDelete = contactId => {
+    setContacts(contacts =>
+      contacts.filter(contact => contact.id !== contactId)
+    );
+  };
 
   const formSubmitHandler = data => {
     const { name } = data;
@@ -49,15 +47,12 @@ const App = () => {
     setFilter(e.target.value);
   };
 
-  const filterContacts =
-    (() => {
-      const normalizedFilter = filter.toLowerCase();
-      return contacts.filter(contact =>
-        contact.name.toLowerCase().includes(normalizedFilter)
-      );
-    },
-    [contacts, filter]);
-
+  const filterContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
   const visibleContacts = filterContacts();
 
   return (
